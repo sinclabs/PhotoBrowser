@@ -15,6 +15,7 @@ public class PhotoBrowser {
     private JFrame mainWindow;
     private JLabel statusLabel;
     private JLabel statusbar;
+    private PhotoViewer photoPanel;
     
     public PhotoBrowser(){
         createGUI();
@@ -23,10 +24,12 @@ public class PhotoBrowser {
     
     private void createComponents(Container frame)  {
         frame.setLayout(new BorderLayout());
+        frame.setFocusable(true);
         frame.add(createMenuBar(), BorderLayout.PAGE_START);
         JPanel togButtons = new JPanel();
         JToggleButton family = new JToggleButton("Family");
         family.addItemListener(new ItemListener( ) {
+            @Override
             public void itemStateChanged(ItemEvent ev) {
               if(ev.getStateChange()==ItemEvent.SELECTED){
                   statusbar.setText("Family On");
@@ -37,6 +40,7 @@ public class PhotoBrowser {
         });
         JToggleButton vacation = new JToggleButton("Vacation");
         vacation.addItemListener(new ItemListener( ) {
+            @Override
             public void itemStateChanged(ItemEvent ev) {
               if(ev.getStateChange()==ItemEvent.SELECTED){
                   statusbar.setText("Vacation On");
@@ -47,6 +51,7 @@ public class PhotoBrowser {
         });
         JToggleButton awesome = new JToggleButton("Awesome Compilation");
         awesome.addItemListener(new ItemListener( ) {
+            @Override
             public void itemStateChanged(ItemEvent ev) {
               if(ev.getStateChange()==ItemEvent.SELECTED){
                   statusbar.setText("Awesome Compilation On");
@@ -59,7 +64,9 @@ public class PhotoBrowser {
         togButtons.add(vacation);
         togButtons.add(awesome);
         frame.add(togButtons, BorderLayout.LINE_START);
-        frame.add(new JPanel(), BorderLayout.CENTER);
+        photoPanel = new PhotoViewer();
+        photoPanel.setPhoto("C:\\img.jpg");
+        frame.add(photoPanel, BorderLayout.CENTER);
         statusbar = new JLabel();
         statusbar.setBorder(BorderFactory.createEtchedBorder());
         statusbar.setText("Ready");
