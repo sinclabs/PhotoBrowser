@@ -26,4 +26,8 @@ public class SketchPath {
     public ArrayList<Point> getPath(){
         return path;
     }
+    
+    public void erasePath(){
+        path.clear();
+    }
 }

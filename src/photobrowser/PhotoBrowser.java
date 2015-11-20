@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import davinci.*;
 
 public class PhotoBrowser {
     
@@ -26,6 +27,8 @@ public class PhotoBrowser {
         frame.setLayout(new BorderLayout());
         frame.setFocusable(true);
         frame.add(createMenuBar(), BorderLayout.PAGE_START);
+        JPanel northPanel = new JPanel();
+        northPanel.setLayout(new BorderLayout());
         JPanel togButtons = new JPanel();
         JToggleButton family = new JToggleButton("Family");
         family.addItemListener(new ItemListener( ) {
@@ -63,10 +66,11 @@ public class PhotoBrowser {
         togButtons.add(family);
         togButtons.add(vacation);
         togButtons.add(awesome);
-        frame.add(togButtons, BorderLayout.LINE_START);
+        northPanel.add(togButtons, BorderLayout.PAGE_START);
         photoPanel = new PhotoViewer();
         photoPanel.setPhoto("C:\\img.jpg");
-        frame.add(photoPanel, BorderLayout.CENTER);
+        northPanel.add(photoPanel, BorderLayout.CENTER);
+        frame.add(northPanel, BorderLayout.CENTER);
         statusbar = new JLabel();
         statusbar.setBorder(BorderFactory.createEtchedBorder());
         statusbar.setText("Ready");
@@ -172,6 +176,7 @@ public class PhotoBrowser {
     
     public static void main(String[] args) {
         // TODO code application logic here
+        UIManager.put(DaVinciUI.UI_CLASS_ID, VinciUI.class.getName());
         PhotoBrowser photoBrowser = new PhotoBrowser();
     }
 }

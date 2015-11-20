@@ -10,6 +10,9 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class PhotoAwesome extends JComponent {
+    
+    private PhotoAwesomeModel model;
+    
     private boolean flipped = false;
     private boolean isPhoto = false;
     private boolean isAnnotated = false;
@@ -19,13 +22,15 @@ public class PhotoAwesome extends JComponent {
     private ArrayList<Character> textInputKey;
     private boolean textInputKeyStart = false;
     private boolean txtAnnotation = false;
+    private AnnotationLibrary annLib;
    
     private BufferedImage photo;
     
     public PhotoAwesome(){
         super();
-        this.setSize(640, 460);
+        //this.setSize(640, 460);
         path = new SketchPath();
+        annLib = new AnnotationLibrary();
         this.textInputKey = new ArrayList<>();
         setFocusable(true);
         
@@ -62,7 +67,7 @@ public class PhotoAwesome extends JComponent {
                 new MouseMotionListener() {
                     @Override
                     public void mouseDragged(MouseEvent e) {
-                        path.setPath(e.getPoint());
+                        annLib.includePoints(e.getPoint());
                         isAnnotated = true;
                         repaint();
                     }
@@ -79,6 +84,7 @@ public class PhotoAwesome extends JComponent {
                 @Override
                 public void mouseReleased(MouseEvent e){
                     if(flipped && isAnnotated){
+                        annLib.stopPoints();
                         repaint();
                     }
                 }
@@ -142,21 +148,26 @@ public class PhotoAwesome extends JComponent {
         if(isPhoto){
             super.paintComponent(g);
             if(!flipped){
-                g.drawImage(photo, 0, 0, null);         
+                g.drawImage(photo, 0, 0, this.getWidth(), this.getHeight(), null);         
             }
             else{
                 g.setColor(Color.white);
-                g.fillRect(0, 0, super.getHeight(), super.getWidth());
+                g.fillRect(0, 0, this.getWidth(), this.getHeight());
                 if(isAnnotated){
-                    ArrayList<Point> pth = path.getPath();
-                    int i = 0;
-                    while(i < pth.size()){
-                        g.setColor(Color.red);
-                        if(i!=0)
-                            g.drawLine(pth.get(i-1).x, pth.get(i-1).y, pth.get(i).x, pth.get(i).y);
-                        else
-                            g.drawLine(pth.get(i).x, pth.get(i).y, pth.get(i).x, pth.get(i).y);
-                        i++;
+                    ArrayList<SketchPath> annList = annLib.getPaths();
+                    int j=0;
+                    while(j < annList.size()){
+                        ArrayList<Point> pth = annList.get(j).getPath();
+                        int i = 0;
+                        while(i < pth.size()){
+                            g.setColor(Color.red);
+                            if(i!=0)
+                                g.drawLine(pth.get(i-1).x, pth.get(i-1).y, pth.get(i).x, pth.get(i).y);
+                            else
+                                g.drawLine(pth.get(i).x, pth.get(i).y, pth.get(i).x, pth.get(i).y);
+                            i++;
+                        }
+                        j++;
                     }
                 }
                 if(textInputKeyStart && !textInput){
