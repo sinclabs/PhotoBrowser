@@ -9,6 +9,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import davinci.*;
+import java.io.File;
 
 public class PhotoBrowser {
     
@@ -67,7 +68,7 @@ public class PhotoBrowser {
         togButtons.add(awesome);
         northPanel.add(togButtons, BorderLayout.PAGE_START);
         photoPanel = new PhotoViewer();
-        photoPanel.setPhoto("/img.jpg");
+        photoPanel.setPhoto(new File(".").getAbsolutePath()+"/src/davinci/img.jpg");
         northPanel.add(photoPanel, BorderLayout.CENTER);
         frame.add(northPanel, BorderLayout.CENTER);
         statusbar = new JLabel();
@@ -160,6 +161,8 @@ public class PhotoBrowser {
     private void createGUI() {
         mainWindow = new JFrame("Photo Awesome v0.0.0");
         mainWindow.setSize(1920,1080);
+        System.out.println(new File(".").getAbsolutePath());
+        mainWindow.setMinimumSize(new Dimension(1920,1080));
         mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         createComponents(mainWindow.getContentPane());
         mainWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
