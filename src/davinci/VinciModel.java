@@ -22,10 +22,16 @@ public class VinciModel implements DaVinciModel {
     private BufferedImage photo;
     private ArrayList<ChangeListener> listenerList = new ArrayList<ChangeListener>();
     private AnnotationLibrary annLib = new AnnotationLibrary();
+    private TextAnnotation textAnn = new TextAnnotation();
     
     Boolean isPhoto = false;
     Boolean isFlipped = false;
     Boolean isAnnotated = false;
+    
+    Boolean textInput = false;
+    Boolean textInputKeyStart = false;
+    Boolean txtAnnotation = false;
+    private Point textInputPt = new Point();
     
     
     public void setImage(String filePath) {
@@ -102,6 +108,31 @@ public class VinciModel implements DaVinciModel {
     public void annotateImage() {
         if(!isAnnotated)
             isAnnotated = true;
+    }
+
+    @Override
+    public void includeChar(Character c) {
+        textAnn.setChar(c);
+    }
+
+    @Override
+    public TextAnnotation getChar() {
+        return textAnn;
+    }
+
+    @Override
+    public void deleteChar() {
+        textAnn.deleteChar();
+    }
+
+    @Override
+    public void setTextStart(Boolean state) {
+        textInputKeyStart = true;
+    }
+
+    @Override
+    public Boolean getTextStart() {
+        return textInputKeyStart;
     }
     
 }

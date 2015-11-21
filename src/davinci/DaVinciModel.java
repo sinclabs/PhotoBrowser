@@ -23,5 +23,10 @@ public interface DaVinciModel {
     public void addChangeListener(ChangeListener c); 
     public void includePoints(Point P);
     public void stopPoints();
+    public void includeChar(Character c);
+    public TextAnnotation getChar();
+    public void deleteChar();
     public AnnotationLibrary getAnnLib();
+    public void setTextStart(Boolean state);
+    public Boolean getTextStart();
 }

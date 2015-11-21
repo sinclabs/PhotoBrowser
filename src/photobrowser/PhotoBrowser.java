@@ -14,7 +14,6 @@ public class PhotoBrowser {
     
     //Private Variables
     private JFrame mainWindow;
-    private JLabel statusLabel;
     private JLabel statusbar;
     private PhotoViewer photoPanel;
     
@@ -68,7 +67,7 @@ public class PhotoBrowser {
         togButtons.add(awesome);
         northPanel.add(togButtons, BorderLayout.PAGE_START);
         photoPanel = new PhotoViewer();
-        photoPanel.setPhoto("C:\\img.jpg");
+        photoPanel.setPhoto("/img.jpg");
         northPanel.add(photoPanel, BorderLayout.CENTER);
         frame.add(northPanel, BorderLayout.CENTER);
         statusbar = new JLabel();
@@ -159,23 +158,16 @@ public class PhotoBrowser {
     }
     
     private void createGUI() {
-        //Create window.
         mainWindow = new JFrame("Photo Awesome v0.0.0");
-        mainWindow.setSize(900,500);
+        mainWindow.setSize(1920,1080);
         mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //mainWindow.setAlwaysOnTop(true);
-
-        //Create and Add Components
         createComponents(mainWindow.getContentPane());
+        mainWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
         
-        //Display the window.
-        //mainWindow.pack();
-        //mainWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
         mainWindow.setVisible(true);
     }
     
     public static void main(String[] args) {
-        // TODO code application logic here
         UIManager.put(DaVinciUI.UI_CLASS_ID, VinciUI.class.getName());
         PhotoBrowser photoBrowser = new PhotoBrowser();
     }

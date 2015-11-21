@@ -23,10 +23,8 @@ import javax.swing.JComponent;
 public class VinciUI extends DaVinciUI implements MouseListener, MouseMotionListener, KeyListener {
     
     Boolean textInput = false;
-    Boolean textInputKeyStart = false;
     Boolean txtAnnotation = false;
     Boolean isPhoto = true;
-    private ArrayList<Character> textInputKey = new ArrayList<Character>();
     private Point textInputPt = new Point();
     
     public VinciUI(){
@@ -75,7 +73,7 @@ public class VinciUI extends DaVinciUI implements MouseListener, MouseMotionList
             }
         }
         
-        if (((DaVinci) e.getComponent()).getModel().isAnnotated())
+        if (((DaVinci) e.getComponent()).getModel().isAnnotated() && ((DaVinci) e.getComponent()).getModel().isFlipped())
             ((DaVinci) e.getComponent()).getModel().includePoints(e.getPoint());
     }
 
@@ -106,9 +104,11 @@ public class VinciUI extends DaVinciUI implements MouseListener, MouseMotionList
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        ((DaVinci) e.getComponent()).getModel().includePoints(e.getPoint());
-        ((DaVinci) e.getComponent()).getModel().annotateImage();
-        ((DaVinci) e.getComponent()).modelChanged();
+        if(((DaVinci) e.getComponent()).getModel().isFlipped()){
+            ((DaVinci) e.getComponent()).getModel().includePoints(e.getPoint());
+            ((DaVinci) e.getComponent()).getModel().annotateImage();
+            ((DaVinci) e.getComponent()).modelChanged();
+        }
     }
 
     @Override
@@ -118,14 +118,15 @@ public class VinciUI extends DaVinciUI implements MouseListener, MouseMotionList
 
     @Override
     public void keyTyped(KeyEvent e) {
-        System.out.println("asd");
+        DaVinciModel m; 
+        m = ((DaVinci)e.getComponent()).getModel();
         if((int)e.getKeyChar() == 8)
-            textInputKey.remove(textInputKey.size()-1);
+            m.deleteChar();
         else if((int)e.getKeyChar() == 27)
             textInput = false;
         else{
-            textInputKey.add(e.getKeyChar());
-            textInputKeyStart = true;
+            m.includeChar(e.getKeyChar());
+            m.setTextStart(true);
         }
         ((DaVinci) e.getComponent()).modelChanged();
     }
@@ -177,12 +178,11 @@ public class VinciUI extends DaVinciUI implements MouseListener, MouseMotionList
                         j++;
                     }
                 }
-                if(textInputKeyStart && !textInput){
-                    System.out.println("b");
+                if(model.getTextStart() && !textInput){
                     g.setColor(Color.black);
-                    char[] textInputKeyChars = new char[textInputKey.size()];
-                    for(int i = 0; i<textInputKey.size(); i++){
-                        textInputKeyChars[i] = textInputKey.get(i);
+                    char[] textInputKeyChars = new char[model.getChar().getChar().size()];
+                    for(int i = 0; i<model.getChar().getChar().size(); i++){
+                        textInputKeyChars[i] = model.getChar().getChar().get(i);
                     }
                     g.drawChars(textInputKeyChars, 0, textInputKeyChars.length, 100, 100);
                 }
@@ -190,11 +190,10 @@ public class VinciUI extends DaVinciUI implements MouseListener, MouseMotionList
                     System.out.println("a");
                     g.setColor(Color.black);
                     g.drawLine(textInputPt.x, textInputPt.y, textInputPt.x, textInputPt.y-10);
-                    if(textInputKeyStart){
-                        System.out.println("b");
-                        char[] textInputKeyChars = new char[textInputKey.size()];
-                        for(int i = 0; i<textInputKey.size(); i++){
-                            textInputKeyChars[i] = textInputKey.get(i);
+                    if(model.getTextStart()){
+                        char[] textInputKeyChars = new char[model.getChar().getChar().size()];
+                        for(int i = 0; i<model.getChar().getChar().size(); i++){
+                            textInputKeyChars[i] = model.getChar().getChar().get(i);
                         }
                         g.drawChars(textInputKeyChars, 0, textInputKeyChars.length, textInputPt.x, textInputPt.y);
                         txtAnnotation = true;

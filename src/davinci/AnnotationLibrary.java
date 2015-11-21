@@ -17,7 +17,7 @@ public class AnnotationLibrary {
     private SketchPath currentPath;
     
     public AnnotationLibrary(){
-        paths = new ArrayList<SketchPath>();
+        paths = new ArrayList<>();
         currentPath = new SketchPath();
     }
     public void includePoints(Point P){
